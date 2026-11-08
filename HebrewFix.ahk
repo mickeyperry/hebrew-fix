@@ -7,7 +7,7 @@
 
 ;@Ahk2Exe-SetName HebrewFix
 ;@Ahk2Exe-SetDescription HebrewFix - fix English/Hebrew wrong-layout text
-;@Ahk2Exe-SetVersion 1.0.1
+;@Ahk2Exe-SetVersion 1.0.2
 ;@Ahk2Exe-SetCompanyName Mickey Perry
 ;@Ahk2Exe-SetCopyright MIT License
 ;@Ahk2Exe-SetMainIcon icon.ico
@@ -90,8 +90,13 @@ for _, hk in [HotkeyMain, HotkeyAlt]
 
 ; ---------- Tray ----------
 StartupLnk := A_Startup "\HebrewFix.lnk"
-if (!A_IsCompiled && FileExist(A_ScriptDir "\icon.ico"))
-    Menu, Tray, Icon, %A_ScriptDir%\icon.ico
+; Tray icon: compiled exe has a separate built-in tray icon (green H), so point it at the main icon
+if A_IsCompiled
+    Menu, Tray, Icon, %A_ScriptFullPath%, -159, 1
+else if FileExist(A_ScriptDir "\icon.ico")
+    Menu, Tray, Icon, %A_ScriptDir%\icon.ico,, 1
+else if FileExist(A_AppData "\..\Local\Programs\HebrewFix\HebrewFix.exe")
+    Menu, Tray, Icon, %A_AppData%\..\Local\Programs\HebrewFix\HebrewFix.exe, -159, 1
 Menu, Tray, NoStandard
 Menu, Tray, Tip, HebrewFix — select text`, press %HotkeyMain% or right-click
 Menu, Tray, Add, HebrewFix (how to use), TrayAbout

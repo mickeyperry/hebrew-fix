@@ -1,6 +1,6 @@
 ﻿; HebrewFix installer — build with: ISCC.exe installer.iss  (or run build.ps1)
 #define AppName "HebrewFix"
-#define AppVersion "1.0.1"
+#define AppVersion "1.0.2"
 #define AppExe "HebrewFix.exe"
 
 [Setup]
