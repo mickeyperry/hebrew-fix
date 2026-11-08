@@ -7,7 +7,7 @@
 
 ;@Ahk2Exe-SetName HebrewFix
 ;@Ahk2Exe-SetDescription HebrewFix - fix English/Hebrew wrong-layout text
-;@Ahk2Exe-SetVersion 1.0.0
+;@Ahk2Exe-SetVersion 1.0.1
 ;@Ahk2Exe-SetCompanyName Mickey Perry
 ;@Ahk2Exe-SetCopyright MIT License
 ;@Ahk2Exe-SetMainIcon icon.ico
@@ -72,7 +72,11 @@ Gui, Btn:Color, FFFFFF
 Gui, Btn:Font, s10, Segoe UI
 Gui, Btn:Add, Text, x10 y7 w210 h20 Center BackgroundTrans, ⇄  Fix layout  (EN ↔ עב)
 Gui, Btn:Show, Hide w230 h34
+DetectHiddenWindows, On          ; the button is hidden while we measure it
 WinGetPos,,, BtnW, BtnH, ahk_id %BtnHwnd%
+DetectHiddenWindows, Off
+if (BtnW = "" || BtnH = "")
+    BtnW := Round(230 * A_ScreenDPI / 96), BtnH := Round(34 * A_ScreenDPI / 96)
 BtnHover := false, BtnBusy := false, Offer := false
 TargetWin := 0, ClickX := 0, ClickY := 0, ClickWin := 0
 
@@ -143,6 +147,10 @@ PlaceBtn:
         bx := ClickX - 20, by := ClickY - BtnH - 10
     }
     bx := Max(wL, Min(bx, wR - BtnW)), by := Max(wT, Min(by, wB - BtnH))
+    if bx is not number
+        bx := ClickX
+    if by is not number
+        by := ClickY
     Gui, Btn:Show, x%bx% y%by% NoActivate
     WinSet, AlwaysOnTop, On, ahk_id %BtnHwnd%
     SetTimer, WatchBtn, 50
